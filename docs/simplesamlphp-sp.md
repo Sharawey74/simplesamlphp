@@ -277,6 +277,35 @@ session_set_save_handler($handler);
 session_start();
 ```
 
+### Applications that use Twig themselves
+
+SimpleSAMLphp uses [Twig](https://twig.symfony.com/) for its templates. If your
+application loads its own copy of Twig (for example from its own `vendor/`
+directory or from an operating system package) and then loads SimpleSAMLphp's
+autoloader from a release archive, two copies of Twig end up in the same PHP
+process. Twig 3 registers a few deprecated global functions in each copy, so PHP
+stops with an error like this, even when both copies are the same version:
+
+```text
+PHP Fatal error:  Cannot redeclare function twig_cycle()
+```
+
+There are two ways to avoid this:
+
+- Install SimpleSAMLphp as a Composer dependency of your application instead of
+  using the release archive:
+
+  ```bash
+  composer require simplesamlphp/simplesamlphp
+  ```
+
+  Composer then installs a single version of Twig that satisfies both your
+  application and SimpleSAMLphp, and both use the same autoloader.
+
+- Run your application and SimpleSAMLphp in different PHP-FPM pools, so they do
+  not interfere with each other. This only works when your application does not
+  load SimpleSAMLphp's autoloader itself (unlike the example above).
+
 ## Support
 
 If you need help to make this work, or want to discuss SimpleSAMLphp with other
