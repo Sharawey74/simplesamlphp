@@ -290,21 +290,15 @@ stops with an error like this, even when both copies are the same version:
 PHP Fatal error:  Cannot redeclare function twig_cycle()
 ```
 
-There are two ways to avoid this:
+To avoid this, install SimpleSAMLphp as a Composer dependency of your
+application instead of using the release archive:
 
-- Install SimpleSAMLphp as a Composer dependency of your application instead of
-  using the release archive:
+```bash
+composer require simplesamlphp/simplesamlphp
+```
 
-  ```bash
-  composer require simplesamlphp/simplesamlphp
-  ```
-
-  Composer then installs a single version of Twig that satisfies both your
-  application and SimpleSAMLphp, and both use the same autoloader.
-
-- Run your application and SimpleSAMLphp in different PHP-FPM pools, so they do
-  not interfere with each other. This only works when your application does not
-  load SimpleSAMLphp's autoloader itself (unlike the example above).
+Composer then installs a single version of Twig that satisfies both your
+application and SimpleSAMLphp, and both use the same autoloader.
 
 ## Support
 
